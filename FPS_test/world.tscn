@@ -1,0 +1,82 @@
+[gd_scene load_steps=13 format=3 uid="uid://b1fc6r3ujlejl"]
+
+[ext_resource type="Script" path="res://world.gd" id="1_eg4iv"]
+[ext_resource type="PackedScene" uid="uid://bkmg6v6kywk7a" path="res://player/player.tscn" id="2_hsax0"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kyd5s"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_40ngq"]
+sky_material = SubResource("ProceduralSkyMaterial_kyd5s")
+
+[sub_resource type="Environment" id="Environment_s0kyg"]
+background_mode = 2
+sky = SubResource("Sky_40ngq")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ptrrf"]
+albedo_color = Color(0.803922, 0.239216, 0.239216, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1udaj"]
+albedo_color = Color(0.194349, 0.194349, 0.194349, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_awj8c"]
+albedo_color = Color(0.237539, 0.237539, 0.237539, 1)
+metallic = 1.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ro6to"]
+size = Vector2(30, 30)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1cvh6"]
+albedo_color = Color(0.890196, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wgyeu"]
+top_radius = 1.0
+bottom_radius = 1.0
+height = 0.1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_je4g3"]
+height = 0.1
+radius = 1.0
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_eg4iv")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_s0kyg")
+
+[node name="WorldBox" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+use_collision = true
+size = Vector3(30, 2, 30)
+material = SubResource("StandardMaterial3D_ptrrf")
+
+[node name="Cut" type="CSGBox3D" parent="WorldBox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+material_override = SubResource("StandardMaterial3D_1udaj")
+operation = 2
+size = Vector3(29, 2, 29)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WorldBox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.499, 0)
+material_override = SubResource("StandardMaterial3D_awj8c")
+mesh = SubResource("PlaneMesh_ro6to")
+
+[node name="Player" parent="." instance=ExtResource("2_hsax0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Target" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 2, -7.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Target"]
+material_override = SubResource("StandardMaterial3D_1cvh6")
+mesh = SubResource("CylinderMesh_wgyeu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Target"]
+shape = SubResource("CylinderShape3D_je4g3")

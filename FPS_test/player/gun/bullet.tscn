@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://bwtbb4necq4t5"]
+
+[ext_resource type="Script" path="res://player/gun/bullet.gd" id="1_0sijs"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_el1ft"]
+albedo_color = Color(1, 1, 0, 1)
+emission_enabled = true
+emission = Color(1, 0, 0, 1)
+emission_energy_multiplier = 5.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_g8m2g"]
+resource_local_to_scene = true
+size = Vector3(0.5, 0.5, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x6451"]
+albedo_color = Color(1, 1, 0, 1)
+emission_enabled = true
+emission = Color(1, 0, 0, 1)
+emission_energy_multiplier = 5.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_epw3x"]
+direction = Vector3(0, 0, 1)
+spread = 60.0
+initial_velocity_min = 30.0
+initial_velocity_max = 50.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_dgycu"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[node name="Bullet" type="Node3D"]
+script = ExtResource("1_0sijs")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_el1ft")
+mesh = SubResource("BoxMesh_g8m2g")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+target_position = Vector3(0, 0, -12)
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.0782)
+material_override = SubResource("StandardMaterial3D_x6451")
+emitting = false
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_epw3x")
+draw_pass_1 = SubResource("BoxMesh_dgycu")
+
+[node name="BulletTimer" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
+
+[connection signal="timeout" from="BulletTimer" to="." method="_on_bullet_timer_timeout"]

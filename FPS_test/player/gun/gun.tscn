@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://dqadjrm65slkt"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6bs8f"]
+albedo_color = Color(0.4, 0.4, 0.4, 1)
+metallic = 0.5
+metallic_specular = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_xambs"]
+size = Vector3(5, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bkisa"]
+albedo_color = Color(0.4, 0.4, 0.4, 1)
+metallic = 0.5
+metallic_specular = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_4fa6m"]
+size = Vector3(1, 1.5, 1)
+
+[node name="Gun" type="Node3D"]
+transform = Transform3D(-6.55671e-09, 0, 0.15, 0, 0.15, 0, -0.15, 0, -6.55671e-09, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_6bs8f")
+mesh = SubResource("BoxMesh_xambs")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -1.25, 0)
+material_override = SubResource("StandardMaterial3D_bkisa")
+mesh = SubResource("BoxMesh_4fa6m")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.5, 0, -7.10543e-15)
+target_position = Vector3(0, 0, -1)

@@ -1,0 +1,54 @@
+[gd_scene load_steps=5 format=3 uid="uid://bkmg6v6kywk7a"]
+
+[ext_resource type="Script" path="res://player/player.gd" id="1_mgr0i"]
+[ext_resource type="PackedScene" uid="uid://dqadjrm65slkt" path="res://player/gun/gun.tscn" id="2_iicef"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bdvbf"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0r4gh"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_mgr0i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_bdvbf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_0r4gh")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head"]
+
+[node name="Gun" parent="Head/Camera3D" instance=ExtResource("2_iicef")]
+transform = Transform3D(-4.37114e-09, 0, 0.1, 0, 0.1, 0, -0.1, 0, -4.37114e-09, 0, -0.3, -0.65)
+
+[node name="Crosshair" type="ColorRect" parent="Head/Camera3D"]
+offset_left = 597.5
+offset_top = 407.5
+offset_right = 602.5
+offset_bottom = 412.5
+color = Color(0.111603, 0.633546, 0.125933, 1)
+
+[node name="Reloading" type="Label" parent="Head/Camera3D"]
+visible = false
+offset_left = 450.0
+offset_top = 300.0
+offset_right = 750.0
+offset_bottom = 400.0
+theme_override_font_sizes/font_size = 50
+text = "RELOADING"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ReloadTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="ShootDelay" type="Timer" parent="."]
+wait_time = 0.175
+autostart = true
+
+[connection signal="timeout" from="ReloadTimer" to="." method="_on_reload_timer_timeout"]
+[connection signal="timeout" from="ShootDelay" to="." method="_on_shoot_delay_timeout"]
